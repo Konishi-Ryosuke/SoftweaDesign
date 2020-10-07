@@ -8,44 +8,37 @@ import java.io.OutputStream;
 import java.util.Random;
 
 public class OmikujiHandler implements HttpHandler{
-    private int count;
+//    private int count;
+    private String unsei;
 
     @Override
     public void handle(HttpExchange exchange) throws IOException{
-        count = count + 1;
-        printRequest(exchange);
+//        count = count + 1;
+//        printRequest(exchange);
         int n = new Random().nextInt(3);
         switch (n){
             case 0:
-                String response = "今日の運勢は大吉です";
-                Headers headers = exchange.getResponseHeaders();
-                headers.add("Content-Type","text/plain;charset=UTF-8");
-                exchange.sendResponseHeaders(200,response.getBytes().length);
-                try(OutputStream os = exchange.getResponseBody()){
-                    os.write(response.getBytes());
-                }
+                 unsei = "大吉";
+                break;
             case 1:
-                String response1 = "今日の運勢は中吉です";
-                Headers headers1 = exchange.getResponseHeaders();
-                headers1.add("Content-Type","text/plain;charset=UTF-8");
-                exchange.sendResponseHeaders(200,response1.getBytes().length);
-                try(OutputStream os = exchange.getResponseBody()){
-                    os.write(response1.getBytes());
-                }
+                 unsei = "中吉";
+                break;
             case 2:
-                String response2 = "今日の運勢は吉です";
-                Headers headers2 = exchange.getResponseHeaders();
-                headers2.add("Content-Type","text/plain;charset=UTF-8");
-                exchange.sendResponseHeaders(200,response2.getBytes().length);
-                try(OutputStream os = exchange.getResponseBody()){
-                    os.write(response2.getBytes());
-                }
+                 unsei = "吉";
+                break;
+        }
+        String uranai = "今日の運勢は" + unsei + "です。";
+        Headers headers = exchange.getResponseHeaders();
+        headers.add("Content-Type","text/plain;charset=UTF-8");
+        exchange.sendResponseHeaders(200,uranai.getBytes().length);
+        try(OutputStream os = exchange.getResponseBody()){
+            os.write(uranai.getBytes());
         }
 
     }
 
     private void printRequest(HttpExchange exchange){
-        System.out.printf("Request Message %d -----------",count);
+        System.out.printf("Request Message %d -----------",unsei);
 
         String method = exchange.getRequestMethod();
         System.out.println("Method:" + method);
